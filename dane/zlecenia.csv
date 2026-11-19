@@ -1,0 +1,13 @@
+caseId,group,scenario,sku,quantity
+O01,standard,normal,SKU-A,1
+O02,standard,normal,SKU-A,3
+O03,standard,normal,SKU-B,2
+O04,standard,normal,SKU-B,3
+O05,limit,normal,SKU-A,5
+O06,limit,normal,SKU-A,6
+O07,limit,normal,SKU-B,4
+O08,limit,normal,SKU-X,1
+O09,retry,transient_once,SKU-A,1
+O10,retry,transient_once,SKU-A,4
+O11,retry,transient_once,SKU-B,1
+O12,retry,transient_once,SKU-B,2

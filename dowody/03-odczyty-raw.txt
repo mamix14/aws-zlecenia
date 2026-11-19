@@ -1,0 +1,49 @@
+### 1. Przygotowanie danych — tożsamość wdrażająca (admin)
+arn:aws:iam::000000000000:root
+Block Public Access:
+{
+    "PublicAccessBlockConfiguration": {
+        "BlockPublicAcls": true,
+        "IgnorePublicAcls": true,
+        "BlockPublicPolicy": true,
+        "RestrictPublicBuckets": true
+    }
+}
+upload: dane/zlecenia.csv to s3://bd91615-zlecenia-dane/bd91615/input/zlecenia.csv
+upload: dane/kontrola.csv to s3://bd91615-zlecenia-dane/kontrola/kontrola.csv
+Obiekt kontrolny istnieje (head-object jako admin):
+{
+    "Rozmiar": 94,
+    "Typ": "text/csv"
+}
+
+### 2. Rola czytelnika — tylko s3:GetObject na bd91615-zlecenia-dane/bd91615/input/*
+
+### 3. Odczyty — ta sama tożsamość czytelnika
+arn:aws:sts::000000000000:assumed-role/bd91615-czytelnik-input/lab3-odczyt
+
+--- Odczyt A: własny plik s3://bd91615-zlecenia-dane/bd91615/input/zlecenia.csv
+{
+    "Status": "OK",
+    "Rozmiar": 379,
+    "ETag": "\"28994f7e5c083c8d2466e12e923b0ea8\""
+}
+Linie: 13 (nagłówek + 12 rekordów)
+caseId,group,scenario,sku,quantity
+O01,standard,normal,SKU-A,1
+O02,standard,normal,SKU-A,3
+O03,standard,normal,SKU-B,2
+O04,standard,normal,SKU-B,3
+O05,limit,normal,SKU-A,5
+O06,limit,normal,SKU-A,6
+O07,limit,normal,SKU-B,4
+O08,limit,normal,SKU-X,1
+O09,retry,transient_once,SKU-A,1
+O10,retry,transient_once,SKU-A,4
+O11,retry,transient_once,SKU-B,1
+O12,retry,transient_once,SKU-B,2
+
+--- Odczyt B: obiekt kontrolny s3://bd91615-zlecenia-dane/kontrola/kontrola.csv
+
+An error occurred (AccessDenied) when calling the GetObject operation: User: arn:aws:sts::000000000000:assumed-role/bd91615-czytelnik-input/lab3-odczyt is not authorized to perform: s3:GetObject on resource: "arn:aws:s3:::bd91615-zlecenia-dane/kontrola/kontrola.csv" because no identity-based policy allows the s3:GetObject action
+kod wyjścia: 255

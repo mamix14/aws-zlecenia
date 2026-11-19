@@ -1,0 +1,16 @@
+services:
+  localstack:
+    container_name: localstack-zlecenia
+    image: localstack/localstack-pro:latest
+    ports:
+      - "127.0.0.1:4566:4566"            # tylko lokalnie
+    env_file:
+      - path: .env                         # LOCALSTACK_AUTH_TOKEN (poza Git)
+        required: false
+    environment:
+      - SERVICES=s3,iam,sts,lambda,logs,dynamodb,sqs,apigateway
+      - ENFORCE_IAM=1                      # LocalStack sprawdza polityki IAM jak AWS
+      - DEBUG=0
+    volumes:
+      - "/var/run/docker.sock:/var/run/docker.sock"
+      - "./volume:/var/lib/localstack"
